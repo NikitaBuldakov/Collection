@@ -1,5 +1,7 @@
 import Collection.MyArrayList;
-import Exceptions.IllegalCapacityException;
+import Exceptions.MyIllegalArgumentException;
+import Exceptions.MyIndexOutOfBoundsException;
+import Exceptions.MyNullPointerException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,9 +26,9 @@ public class MyArrayListTest {
         assertTrue(list.size() == 0);
     }
 
-    @Test //(expected = IllegalCapacityException.class)
+    @Test
     public void testInvalidCapacity(){
-        assertThrows(IllegalCapacityException.class, ()-> list = new MyArrayList<String>(-1));
+        assertThrows(MyIllegalArgumentException.class, ()-> list = new MyArrayList<String>(-1));
     }
 
     @Test
@@ -49,15 +51,15 @@ public class MyArrayListTest {
         assertTrue(list.size()==4);
     }
 
-    @Test (expected = NullPointerException.class)
+    @Test
     public void testAddElementNull(){
-        list.add(0, null);
+        assertThrows(MyNullPointerException.class, ()-> list.add(0, null));
     }
 
-    @Test (expected = NullPointerException.class)
+    @Test
     public void testSetElementNull(){
         list.add(0, "Kheyla");
-        list.set(0, null);
+        assertThrows(MyNullPointerException.class, ()-> list.set(0, null));
     }
 
     @Test
@@ -83,8 +85,8 @@ public class MyArrayListTest {
         assertTrue(list.size() == 2);
     }
 
-    @Test (expected = IndexOutOfBoundsException.class)
+    @Test
     public void testRemoveWithEmptyList(){
-        list.remove(0);
+        assertThrows(MyIndexOutOfBoundsException.class, ()-> list.remove(0));
     }
 }

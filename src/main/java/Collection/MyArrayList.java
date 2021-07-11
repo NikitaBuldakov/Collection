@@ -1,6 +1,6 @@
 package Collection;
 
-import Exceptions.IllegalCapacityException;
+import Exceptions.MyIllegalArgumentException;
 import Exceptions.MyIndexOutOfBoundsException;
 import Exceptions.MyNullPointerException;
 import lombok.SneakyThrows;
@@ -23,7 +23,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
     public MyArrayList(int size){
 
         if(size < 0)
-            throw new IllegalCapacityException();
+            throw new MyIllegalArgumentException();
         pointer = size;
         size = (int) Math.ceil(Math.log(size) / Math.log(2));
         this.array = new Object[size];
@@ -79,6 +79,9 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
 
         if(indexOf(o) < 0)
             throw new MyIndexOutOfBoundsException();
+
+
+
         for(int i = indexOf(o); i < array.length - 1; i++){
             array[i] = array[i+1];
         }
@@ -147,6 +150,9 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         if(index < 0)
             throw new MyIndexOutOfBoundsException();
 
+        if(element == null)
+            throw new MyNullPointerException();
+
         return (E) (array[index] = element);
     }
 
@@ -155,6 +161,9 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
 
         if(index < 0)
             throw new MyIndexOutOfBoundsException();
+
+        if(element == null)
+            throw new MyNullPointerException();
 
         if(pointer + 1 >= array.length-1)
             resize(array.length * RESIZE_RATE);
@@ -170,16 +179,18 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
 
     }
 
+    @SneakyThrows
     public E remove(int index) {
 
         Object o = null;
-        if(index < pointer && index >= 0){//try catch better
-            o = get(index);
 
-            for(int i = index; i < pointer; i++)
-                array[i] = array[i + 1];
+        if(index < 0 || pointer == 0)
+            throw new MyIndexOutOfBoundsException();
 
-        }
+        o = get(index);
+        for(int i = index; i < pointer; i++)
+            array[i] = array[i + 1];
+
         pointer--;
         return (E) o;
     }
@@ -217,7 +228,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         }
 
         if(fromIndex < 0 || toIndex > array.length-1)
-            throw new IllegalCapacityException();
+            throw new MyIllegalArgumentException();
 
         List arrayList = null;
         arrayList = new MyArrayList<E>(toIndex - fromIndex);
