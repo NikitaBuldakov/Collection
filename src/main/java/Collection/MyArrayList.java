@@ -29,6 +29,11 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         this.array = new Object[size];
     }
 
+    @SneakyThrows
+    public MyArrayList(Collection<? extends E> collection){
+
+    }
+
     public int size() {
         return pointer;
     }
@@ -42,6 +47,8 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
             return true;
         return false;
     }
+
+    // add trimto size and enshuresize
 
     public Iterator<E> iterator() {
         Iterator<E> iterator = new Iterator<E>() {
@@ -221,14 +228,11 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
 
     @SneakyThrows
     public List subList(int fromIndex, int toIndex) {
-        if (fromIndex > toIndex) {
-            int temp = fromIndex;
-            fromIndex = toIndex;
-            toIndex = temp;
-        }
+        if (fromIndex > toIndex)
+            throw new IllegalArgumentException();
 
         if(fromIndex < 0 || toIndex > array.length-1)
-            throw new MyIllegalArgumentException();
+            throw new IndexOutOfBoundsException();
 
         List arrayList = null;
         arrayList = new MyArrayList<E>(toIndex - fromIndex);
@@ -238,7 +242,12 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         return arrayList;
     }
 
+    @SneakyThrows
     public boolean retainAll(Collection c) {
+
+        if (c == null)
+            throw new NullPointerException();
+
         boolean check = false;
         for(Object item: c){
             if(contains(item)) {
@@ -250,7 +259,12 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         return check;
     }
 
+    @SneakyThrows
     public boolean removeAll(Collection c) {
+
+        if (c == null)
+            throw new NullPointerException();
+
         boolean check = false;
         for(Object item: c){
             if(contains(item)) {
@@ -262,7 +276,12 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         return check;
     }
 
+    @SneakyThrows
     public boolean containsAll(Collection c) {
+
+        if (c == null)
+            throw new NullPointerException();
+
         for(Object item: c){
             if(!contains(item))
                 return false;
@@ -270,8 +289,11 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         return true;
     }
 
-    @SuppressWarnings("unchecked")
+    @SneakyThrows
     public <T> T[] toArray(T[] a) {
+
+        if (a == null)
+            throw new NullPointerException();
 
         if (a.length < pointer)
             return (T[]) Arrays.copyOf(array, pointer, a.getClass());

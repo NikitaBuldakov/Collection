@@ -21,16 +21,25 @@ public class HashSet<E> extends AbstractSet<E> implements Set<E> {
         map = new HashMap<>();
     }
 
+    @SneakyThrows
     public HashSet(int capacty) {
+        if (capacty < 0)
+            throw new IllegalArgumentException();
         map = new HashMap<>(capacty);
     }
 
+    @SneakyThrows
     public HashSet(int capacty, float loadFactor) {
+        if (capacty < 0 || loadFactor < 0)
+            throw new IllegalArgumentException();
         map = new HashMap<>(capacty, loadFactor);
     }
 
+    @SneakyThrows
     public HashSet(Collection<? extends E> collection)
     {
+        if (collection == null)
+            throw new NullPointerException();
         int capacity = Math.max(16, (int)(collection.size()/.75f)+1);
         this.map = new HashMap<>(capacity);
         for (E e: collection){
@@ -57,6 +66,7 @@ public class HashSet<E> extends AbstractSet<E> implements Set<E> {
         return map.keySet().iterator();
     }
 
+
     public boolean add(E e) {
         return map.put(e, object) == null;
     }
@@ -67,7 +77,7 @@ public class HashSet<E> extends AbstractSet<E> implements Set<E> {
     }
 
     @SneakyThrows
-    public Object clone() throws InternalError
+    public Object clone() throws InternalError // clonnable
     {
 
         HashSet hashSet;
