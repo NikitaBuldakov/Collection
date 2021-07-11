@@ -1,8 +1,8 @@
 package Exceptions;
 
 public class MyNullPointerException extends Exception{
-    public String toString()
+    public String toString( String str)
     {
-        return "Cannot add nullable value";
+        return str;
     }
 }

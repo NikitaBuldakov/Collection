@@ -1,8 +1,8 @@
 package Exceptions;
 
 public class MyIllegalArgumentException extends Exception{
-    public String toString()
+    public String toString( String str)
     {
-        return "Illegal capacity declared.";
+        return str;
     }
 }

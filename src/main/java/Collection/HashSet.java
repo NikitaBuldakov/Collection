@@ -2,78 +2,86 @@ package Collection;
 
 
 import lombok.Builder;
+import lombok.SneakyThrows;
 import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 public class HashSet<E> extends AbstractSet<E> implements Set<E> {
-    @Override
+
+    private HashMap<E, Object> map;
+
+
+
+    private static final Object object = new Object();
+
+    public HashSet() {
+        map = new HashMap<>();
+    }
+
+    public HashSet(int capacty) {
+        map = new HashMap<>(capacty);
+    }
+
+    public HashSet(int capacty, float loadFactor) {
+        map = new HashMap<>(capacty, loadFactor);
+    }
+
+    public HashSet(Collection<? extends E> collection)
+    {
+        int capacity = Math.max(16, (int)(collection.size()/.75f)+1);
+        this.map = new HashMap<>(capacity);
+        for (E e: collection){
+            map.put(e, object);
+        }
+    }
+
     public int size() {
-        return 0;
+        return map.size();
     }
 
-    @Override
+
     public boolean isEmpty() {
-        return false;
+        return map.isEmpty();
     }
 
-    @Override
+
     public boolean contains(Object o) {
-        return false;
+        return map.containsKey(o);
     }
 
-    @Override
+
     public Iterator<E> iterator() {
-        return null;
+        return map.keySet().iterator();
     }
 
-    @Override
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
-    }
-
-    @Override
     public boolean add(E e) {
-        return false;
+        return map.put(e, object) == null;
     }
 
-    @Override
+
     public boolean remove(Object o) {
-        return false;
+        return map.remove(o) == object;
     }
 
-    @Override
-    public boolean containsAll(Collection<?> c) {
-        return false;
+    @SneakyThrows
+    public Object clone() throws InternalError
+    {
+
+        HashSet hashSet;
+        try {
+            hashSet = (HashSet) super.clone();
+            hashSet.map = (HashMap) map.clone();
+        } catch (Exception e) {
+            throw new InternalError();
+        }
+        return hashSet;
     }
 
-    @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return false;
-    }
 
-    @Override
-    public boolean retainAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return false;
-    }
-
-    @Override
     public void clear() {
-
+        map.clear();
     }
 }

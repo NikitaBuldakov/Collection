@@ -1,8 +1,8 @@
 package Exceptions;
 
 public class MyIndexOutOfBoundsException extends Exception{
-    public String toString()
+    public String toString( String str)
     {
-        return "Error. Bad sides of triangle.";
+        return str;
     }
 }
