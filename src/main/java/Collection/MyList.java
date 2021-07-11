@@ -10,17 +10,18 @@ import java.util.*;
 
 
 @Slf4j
-public class MyArrayList<E> extends AbstractList<E> implements List<E> {
+public class MyList<E> extends AbstractList<E> implements List<E> {
 
     private final int INT_SIZE = 16;
     private final int RESIZE_RATE = 2;
     private int pointer = 0;
+    private int capacity = 0;
     private Object[] array = new Object[INT_SIZE];
 
-    public MyArrayList(){}
+    public MyList(){}
 
     @SneakyThrows
-    public MyArrayList(int size){
+    public MyList(int size){
 
         if(size < 0)
             throw new MyIllegalArgumentException();
@@ -30,7 +31,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
     }
 
     @SneakyThrows
-    public MyArrayList(Collection<? extends E> collection){
+    public MyList(Collection<? extends E> collection){
 
     }
 
@@ -47,8 +48,6 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
             return true;
         return false;
     }
-
-    // add trimto size and enshuresize
 
     public Iterator<E> iterator() {
         Iterator<E> iterator = new Iterator<E>() {
@@ -87,8 +86,6 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
         if(indexOf(o) < 0)
             throw new MyIndexOutOfBoundsException();
 
-
-
         for(int i = indexOf(o); i < array.length - 1; i++){
             array[i] = array[i+1];
         }
@@ -112,6 +109,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
 
         return true;
     }
+
 
     @SneakyThrows
     public boolean addAll(int index, Collection c) {
@@ -235,7 +233,7 @@ public class MyArrayList<E> extends AbstractList<E> implements List<E> {
             throw new IndexOutOfBoundsException();
 
         List arrayList = null;
-        arrayList = new MyArrayList<E>(toIndex - fromIndex);
+        arrayList = new MyList<E>(toIndex - fromIndex);
         for(int i = fromIndex; i < toIndex; i++)
             arrayList.add(array[i]);
 

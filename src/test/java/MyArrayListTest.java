@@ -1,4 +1,4 @@
-import Collection.MyArrayList;
+import Collection.MyList;
 import Exceptions.MyIllegalArgumentException;
 import Exceptions.MyIndexOutOfBoundsException;
 import Exceptions.MyNullPointerException;
@@ -17,7 +17,7 @@ public class MyArrayListTest {
 
     @Before
     public void setUp(){
-        list = new MyArrayList<String>();
+        list = new MyList<String>();
     }
 
     @Test
@@ -28,7 +28,7 @@ public class MyArrayListTest {
 
     @Test
     public void testInvalidCapacity(){
-        assertThrows(MyIllegalArgumentException.class, ()-> list = new MyArrayList<String>(-1));
+        assertThrows(MyIllegalArgumentException.class, ()-> list = new MyList<String>(-1));
     }
 
     @Test

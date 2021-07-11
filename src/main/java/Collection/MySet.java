@@ -1,15 +1,13 @@
 package Collection;
 
 
-import lombok.Builder;
 import lombok.SneakyThrows;
-import lombok.With;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
 @Slf4j
-public class HashSet<E> extends AbstractSet<E> implements Set<E> {
+public class MySet<E> extends AbstractSet<E> implements Set<E> {
 
     private HashMap<E, Object> map;
 
@@ -17,26 +15,26 @@ public class HashSet<E> extends AbstractSet<E> implements Set<E> {
 
     private static final Object object = new Object();
 
-    public HashSet() {
+    public MySet() {
         map = new HashMap<>();
     }
 
     @SneakyThrows
-    public HashSet(int capacty) {
+    public MySet(int capacty) {
         if (capacty < 0)
             throw new IllegalArgumentException();
         map = new HashMap<>(capacty);
     }
 
     @SneakyThrows
-    public HashSet(int capacty, float loadFactor) {
+    public MySet(int capacty, float loadFactor) {
         if (capacty < 0 || loadFactor < 0)
             throw new IllegalArgumentException();
         map = new HashMap<>(capacty, loadFactor);
     }
 
     @SneakyThrows
-    public HashSet(Collection<? extends E> collection)
+    public MySet(Collection<? extends E> collection)
     {
         if (collection == null)
             throw new NullPointerException();
@@ -80,9 +78,9 @@ public class HashSet<E> extends AbstractSet<E> implements Set<E> {
     public Object clone() throws InternalError // clonnable
     {
 
-        HashSet hashSet;
+        MySet hashSet;
         try {
-            hashSet = (HashSet) super.clone();
+            hashSet = (MySet) super.clone();
             hashSet.map = (HashMap) map.clone();
         } catch (Exception e) {
             throw new InternalError();
