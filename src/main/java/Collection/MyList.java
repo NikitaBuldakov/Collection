@@ -6,6 +6,7 @@ import Exceptions.MyNullPointerException;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 
@@ -25,7 +26,6 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
 
         if(size < 0)
             throw new MyIllegalArgumentException();
-        pointer = size;
         size = (int) Math.ceil(Math.log(size) / Math.log(2));
         this.array = new Object[size];
     }
@@ -226,16 +226,17 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
     }
 
     @SneakyThrows
-    public List subList(int fromIndex, int toIndex) {
+    public List<E> subList(int fromIndex, int toIndex) {
         if (fromIndex > toIndex)
             throw new IllegalArgumentException();
 
         if(fromIndex < 0 || toIndex > array.length-1)
             throw new IndexOutOfBoundsException();
 
-        List arrayList = new MyList<E>(toIndex - fromIndex);
+        List<E> arrayList = new MyList<E>(toIndex - fromIndex);
+
         for(int i = fromIndex; i < toIndex; i++)
-            arrayList.add(array[i]);
+            arrayList.add((E) array[i]);
 
         return arrayList;
     }
@@ -247,11 +248,13 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
             throw new NullPointerException();
 
         boolean check = false;
-        for(Object item: c){
-            if(contains(item)) {
-                add(item);
-                check = true;
-                pointer++;
+
+        for(Object item: array){
+            if(item != null) {
+                if (!c.contains(item)) {
+                    remove(item);
+                    check = true;
+                }
             }
         }
         return check;
@@ -268,7 +271,6 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
             if(contains(item)) {
                 remove(item);
                 check = true;
-                pointer--;
             }
         }
         return check;

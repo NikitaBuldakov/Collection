@@ -2,6 +2,7 @@ import Collection.MyList;
 import Exceptions.MyIllegalArgumentException;
 import Exceptions.MyIndexOutOfBoundsException;
 import Exceptions.MyNullPointerException;
+import com.sun.source.tree.NewArrayTree;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,21 +16,35 @@ public class MyListTest {
 
     private List<String> list;
 
+    private ArrayList<String> arrayList;
+
+    private ArrayList<String> nullableCollection;
 
     @Before
     public void setUp(){
         list = new MyList<String>();
+
+        arrayList = new ArrayList<>();
+
+        arrayList.add(0, "Karol");
+        arrayList.add(1, "Vanessa");
+        arrayList.add(2, "Amanda");
     }
 
     @Test
     public void testListInit(){
         assertTrue(list.isEmpty());
-        assertTrue(list.size() == 0);
+        assertEquals(0, list.size());
     }
 
     @Test
     public void testInvalidCapacity(){
         assertThrows(MyIllegalArgumentException.class, ()-> list = new MyList<String>(-1));
+    }
+
+    @Test
+    public void testInitWithNullableCollection(){
+        assertThrows(NullPointerException.class, ()-> list = new MyList<String>(nullableCollection));
     }
 
     @Test
@@ -49,12 +64,13 @@ public class MyListTest {
         assertEquals("Vanessa", list.get(2));
         assertEquals("Amanda", list.get(3));
 
-        assertTrue(list.size()==4);
+        assertEquals(4, list.size());
     }
 
     @Test
     public void testAddElementNull(){
         assertThrows(MyNullPointerException.class, ()-> list.add(0, null));
+        assertThrows(NullPointerException.class, ()-> list.add(null));
     }
 
     @Test
@@ -83,7 +99,23 @@ public class MyListTest {
         list.add(2, "Amanda");
 
         assertEquals("Amanda", list.remove(2));
-        assertTrue(list.size() == 2);
+        assertEquals(2, list.size());
+    }
+
+    @Test
+    public void testAddNullableCollection(){
+        assertThrows(MyNullPointerException.class, ()-> list.addAll(nullableCollection));
+        assertThrows(MyNullPointerException.class, ()-> list.addAll(0, nullableCollection));
+    }
+
+    @Test
+    public void testInvalidArgumentForAddingCollection(){
+        assertThrows(MyIndexOutOfBoundsException.class, ()-> list.addAll(-1, arrayList));
+    }
+
+    @Test
+    public void testRemoveByIllegalIndex(){
+        assertThrows(MyIndexOutOfBoundsException.class, ()-> list.remove(-1));
     }
 
     @Test
@@ -99,13 +131,8 @@ public class MyListTest {
 
     @Test
     public void testInitWithCollection(){
-        ArrayList<String> arrayList = new ArrayList();
 
-        arrayList.add(0, "Karol");
-        arrayList.add(1, "Vanessa");
-        arrayList.add(2, "Amanda");
-
-        list = new MyList<String>(arrayList);
+        list = new MyList<>(arrayList);
 
         assertTrue(list.containsAll(arrayList));
         assertEquals(arrayList.size(), list.size());
@@ -113,11 +140,6 @@ public class MyListTest {
 
     @Test
     public void testAddAllCollection(){
-        ArrayList<String> arrayList = new ArrayList();
-
-        arrayList.add(0, "Karol");
-        arrayList.add(1, "Vanessa");
-        arrayList.add(2, "Amanda");
 
         list.addAll(arrayList);
 
@@ -137,11 +159,6 @@ public class MyListTest {
 
     @Test
     public void testClear(){
-        ArrayList<String> arrayList = new ArrayList();
-
-        arrayList.add(0, "Karol");
-        arrayList.add(1, "Vanessa");
-        arrayList.add(2, "Amanda");
 
         list.addAll(arrayList);
 
@@ -153,11 +170,6 @@ public class MyListTest {
 
     @Test
     public void testIndexOf(){
-        ArrayList<String> arrayList = new ArrayList();
-
-        arrayList.add(0, "Karol");
-        arrayList.add(1, "Vanessa");
-        arrayList.add(2, "Amanda");
 
         list.addAll(arrayList);
         list.addAll(2, arrayList);
@@ -169,19 +181,86 @@ public class MyListTest {
 
     @Test
     public void testSubList(){
-        ArrayList<String> arrayList = new ArrayList();
-
-        arrayList.add(0, "Karol");
-        arrayList.add(1, "Vanessa");
-        arrayList.add(2, "Amanda");
 
         list.addAll(arrayList);
         list.addAll(2, arrayList);
 
         List<String> newList = list.subList(2, 5);
 
-        assertEquals(newList, arrayList);
+        assertEquals("Karol", newList.get(0));
+        assertEquals("Vanessa", newList.get(1));
+        assertEquals("Amanda", newList.get(2));
     }
 
+    @Test
+    public void testSubListWithIllegalIndexes()
+    {
+        assertThrows(IndexOutOfBoundsException.class, ()-> list.subList(-2, 200));
+        assertThrows(IllegalArgumentException.class, ()-> list.subList(15, 2));
+    }
+
+    @Test
+    public void testRetainALL(){
+
+        list.addAll(arrayList);
+
+        List<String> newList = new MyList<String>();
+
+        List<String> expectedList = new MyList<String>();
+
+        expectedList.add("Karol");
+        expectedList.add("Vanessa");
+
+        newList.add("Karol");
+        newList.add("Piter");
+        newList.add("Vanessa");
+        newList.add("Samantha");
+
+        list.retainAll(newList);
+
+        assertArrayEquals(list.toArray(), expectedList.toArray());
+    }
+
+    @Test
+    public void testRemoveAll(){
+
+        list.addAll(arrayList);
+        list.removeAll(arrayList);
+        assertTrue(list.isEmpty());
+
+    }
+
+    @Test
+    public void testContainsALl(){
+        list.addAll(arrayList);
+        assertTrue(list.containsAll(arrayList));
+    }
+
+    @Test
+    public void testContainsRemoveRetainAllWithNullableCollection(){
+        assertThrows(NullPointerException.class, ()-> list.containsAll(nullableCollection));
+        assertThrows(NullPointerException.class, ()-> list.removeAll(nullableCollection));
+        assertThrows(NullPointerException.class, ()-> list.retainAll(nullableCollection));
+    }
+
+    @Test
+    public void testToArray(){
+
+        list.addAll(arrayList);
+
+        Object[] ar1 = list.toArray();
+
+        assertEquals("Karol", ar1[0]);
+        assertEquals("Vanessa", ar1[1]);
+        assertEquals("Amanda",ar1[2]);
+
+        String[] ar2 = new String[list.size()];
+        ar2 = list.toArray(ar2);
+
+        assertEquals("Karol", ar2[0]);
+        assertEquals("Vanessa", ar2[1]);
+        assertEquals("Amanda",ar2[2]);
+
+    }
 
 }
