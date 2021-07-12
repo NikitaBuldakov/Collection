@@ -263,4 +263,11 @@ public class MyListTest {
 
     }
 
+    @Test
+    public void testGetElement(){
+        list.add("Karol");
+
+        assertEquals(list.get(0), "Karol");
+    }
+
 }
