@@ -3,6 +3,7 @@ package Collection;
 import Exceptions.MyIllegalArgumentException;
 import Exceptions.MyIndexOutOfBoundsException;
 import Exceptions.MyNullPointerException;
+import jdk.jshell.spi.ExecutionControl;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
@@ -217,12 +218,14 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
         return -1;
     }
 
+    @SneakyThrows
     public ListIterator listIterator() {
-        return null;
+        throw new ExecutionControl.NotImplementedException("Not implimented method");
     }
 
+    @SneakyThrows
     public ListIterator listIterator(int index) {
-        return null;
+        throw new ExecutionControl.NotImplementedException("Not implimented method");
     }
 
     @SneakyThrows
