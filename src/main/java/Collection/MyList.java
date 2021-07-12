@@ -32,7 +32,10 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
 
     @SneakyThrows
     public MyList(Collection<? extends E> collection){
-
+        if (collection == null)
+            throw new NullPointerException();
+        this.array = new Object[collection.size()];
+        this.addAll(collection);
     }
 
     public int size() {
@@ -104,8 +107,6 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
 
         for (Object item: c)
             add(item);
-
-        pointer += c.size();
 
         return true;
     }
@@ -232,8 +233,7 @@ public class MyList<E> extends AbstractList<E> implements List<E> {
         if(fromIndex < 0 || toIndex > array.length-1)
             throw new IndexOutOfBoundsException();
 
-        List arrayList = null;
-        arrayList = new MyList<E>(toIndex - fromIndex);
+        List arrayList = new MyList<E>(toIndex - fromIndex);
         for(int i = fromIndex; i < toIndex; i++)
             arrayList.add(array[i]);
 
